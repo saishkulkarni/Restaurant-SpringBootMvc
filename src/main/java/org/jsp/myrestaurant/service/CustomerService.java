@@ -45,7 +45,7 @@ public class CustomerService {
             customer.setStatus(true);
             dao.save(customer);
             map.put("pos", "Otp verify Successfully");
-            return "Customer";
+            return "CustomerLogin";
         } else {
             map.put("neg", "Otp mismatch");
             map.put("id", customer.getId());
@@ -57,13 +57,13 @@ public class CustomerService {
         Customer customer = dao.fetchByEmail(helper.getEmail());
         if (customer == null) {
             map.put("neg", "Invalid Email");
-            return "Customer";
+            return "CustomerLogin";
         } else if (AES.decrypt(customer.getPassword(), "123").equals(helper.getPassword())) {
             map.put("pos", "Valid Email");
             return "CustomerHome";
         } else {
             map.put("neg", "Invalid Password");
-            return "Customer";
+            return "CustomerLogin";
         }
     }
 }

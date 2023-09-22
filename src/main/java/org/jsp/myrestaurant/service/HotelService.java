@@ -64,10 +64,10 @@ public class HotelService {
             if (AES.decrypt(hotel.getPassword(), "123").equals(helper.getPassword())) {
 
                 map.put("pos", "Loggedin successfully");
-                return "hotelhome";
+                return "HotelHome";
             } else {
                 map.put("neg", "wrong password");
-                return "hotel";
+                return "HotelLogin";
             }
         }
     }
