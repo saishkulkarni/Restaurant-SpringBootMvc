@@ -27,19 +27,19 @@ public class HotelController {
 
     @GetMapping
     public String hotelLogin() {
-        return "hotel";
+        return "HotelLogin";
     }
 
     @GetMapping("/register")
     public String hotelRegister(ModelMap map) {
         map.put("hotel", hotel);
-        return "hotelregister";
+        return "HotelRegister";
     }
 
     @PostMapping("/register")
     public String register(@Valid Hotel hotel, BindingResult result, ModelMap map) {
         if (result.hasErrors()) {
-            return "hotelregister";
+            return "HotelRegister";
         }
         return hotelService.register(hotel, map);
     }
