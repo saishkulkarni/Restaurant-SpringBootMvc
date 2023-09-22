@@ -1,0 +1,15 @@
+/* Define styles for the buttons */
+button {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+    text-decoration: none;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
