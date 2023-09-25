@@ -1,5 +1,8 @@
 package org.jsp.myrestaurant.controller;
 
+import java.io.IOException;
+
+import org.jsp.myrestaurant.dto.FoodItem;
 import org.jsp.myrestaurant.dto.Hotel;
 import org.jsp.myrestaurant.helper.LoginHelper;
 import org.jsp.myrestaurant.service.HotelService;
@@ -12,7 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.mail.Multipart;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @RequestMapping("/hotel")
@@ -50,8 +56,29 @@ public class HotelController {
     }
 
     @PostMapping("/login")
+    public String login(LoginHelper helper, ModelMap map, HttpSession session) {
+        return hotelService.login(helper, map, session);
+    }
 
-    public String login(LoginHelper helper, ModelMap map) {
-        return hotelService.login(helper, map);
+    @GetMapping("/add-item")
+    public String addItem(HttpSession session, ModelMap map) {
+        Hotel hotel = (Hotel) session.getAttribute("hotel");
+        if (hotel != null) {
+            return "AddItem";
+        } else {
+            map.put("neg", "Invalid Session");
+            return "HotelLogin";
+        }
+    }
+    
+    @PostMapping("/add-item")
+    public String addItem(FoodItem foodItem,@RequestParam MultipartFile image,HttpSession session, ModelMap map) throws IOException {
+        Hotel hotel = (Hotel) session.getAttribute("hotel");
+        if (hotel != null) {
+            return hotelService.addItem(foodItem, image, hotel, map);
+        } else {
+            map.put("neg", "Invalid Session");
+            return "HotelLogin";
+        }
     }
 }

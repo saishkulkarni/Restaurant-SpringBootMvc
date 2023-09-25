@@ -8,7 +8,8 @@ pageEncoding="ISO-8859-1"%>
   </head>
   <body>
     ${pos} ${neg}
-    <a href=""><button>Add Items</button></a>
+    <a href="/hotel/add-item"><button>Add Item</button></a>
     <a href=""><button>Fetch Items</button></a>
+    <a href="/logout"><button>Logout</button></a>
   </body>
 </html>

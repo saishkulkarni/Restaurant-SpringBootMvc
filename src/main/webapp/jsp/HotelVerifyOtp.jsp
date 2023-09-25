@@ -10,8 +10,6 @@ pageEncoding="ISO-8859-1" isELIgnored="false"%>
     ${pos} ${neg}
     <form action="/hotel/verify-otp" method="post">
       <h1>Enter Otp</h1>
-      <br />
-      <br />
       <input type="text" name="id" value="${id}" hidden="hidden" /><br />
       <br />
       <br /><input type="text" name="otp" /><br />

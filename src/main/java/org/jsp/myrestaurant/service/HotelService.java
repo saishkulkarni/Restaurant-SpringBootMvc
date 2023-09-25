@@ -1,8 +1,12 @@
 package org.jsp.myrestaurant.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.jsp.myrestaurant.dao.HotelDao;
+import org.jsp.myrestaurant.dto.FoodItem;
 import org.jsp.myrestaurant.dto.Hotel;
 import org.jsp.myrestaurant.helper.AES;
 import org.jsp.myrestaurant.helper.LoginHelper;
@@ -10,6 +14,9 @@ import org.jsp.myrestaurant.helper.SendMailLogic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class HotelService {
@@ -25,15 +32,15 @@ public class HotelService {
         if (hotel1 == null && hotel2 == null) {
             int otp = new Random().nextInt(1000, 9999);
             hotel.setOtp(otp);
-            mailLogic.send(hotel);
+            // mailLogic.send(hotel);
             hotel.setPassword(AES.encrypt(hotel.getPassword(), "123"));
             hotelDao.save(hotel);
             map.put("id", hotel.getId());
-            return "hotelverifyotp";
+            return "HotelVerifyOtp";
 
         } else {
-            map.put("neg", "emailandphoneshouldnotberepeated");
-            return "hotelregister";
+            map.put("neg", "email and phone should not be repeated");
+            return "HotelRegister";
         }
 
     }
@@ -44,25 +51,25 @@ public class HotelService {
             hotel.setStatus(true);
             hotelDao.save(hotel);
             map.put("pos", "Otp verified successfully");
-            return "hotel";
+            return "HotelLogin";
         } else {
             map.put("neg", "otp mismatch");
             map.put("id", hotel.getId());
-            return "hotelverifyotp";
+            return "HotelVerifyOtp";
         }
 
     }
 
-    public String login(LoginHelper helper, ModelMap map) {
+    public String login(LoginHelper helper, ModelMap map, HttpSession session) {
         Hotel hotel = hotelDao.fetchByEmail(helper.getEmail());
         if (hotel == null) {
             map.put("neg", "invalid email");
-            return "hotel";
+            return "HotelLogin";
         } else {
             System.out.println(AES.decrypt(hotel.getPassword(), "123"));
             System.out.println(helper.getPassword());
             if (AES.decrypt(hotel.getPassword(), "123").equals(helper.getPassword())) {
-
+                session.setAttribute("hotel", hotel);
                 map.put("pos", "Loggedin successfully");
                 return "HotelHome";
             } else {
@@ -70,6 +77,22 @@ public class HotelService {
                 return "HotelLogin";
             }
         }
+    }
+
+    public String addItem(FoodItem foodItem, MultipartFile image, Hotel hotel, ModelMap map) throws IOException {
+
+        byte[] picture = new byte[image.getInputStream().available()];
+        image.getInputStream().read(picture);
+
+        foodItem.setPicture(picture);
+        List<FoodItem> list = hotel.getItems();
+        if (list == null)
+            list = new ArrayList<FoodItem>();
+        list.add(foodItem);
+        hotel.setItems(list);
+        hotelDao.save(hotel);
+        map.put("pos", "Item added successfully");
+        return "HotelHome";
     }
 
 }
