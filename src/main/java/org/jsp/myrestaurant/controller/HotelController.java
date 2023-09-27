@@ -81,7 +81,7 @@ public class HotelController {
         }
     }
 
-    @GetMapping("/hotel/fetch-items")
+    @GetMapping("/fetch-items")
     public String fetchItems(HttpSession session, ModelMap map) {
     Hotel hotel = (Hotel) session.getAttribute("hotel");
         if (hotel != null) {
