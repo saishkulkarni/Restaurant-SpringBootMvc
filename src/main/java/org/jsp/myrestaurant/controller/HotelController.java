@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.mail.Multipart;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
@@ -76,6 +75,17 @@ public class HotelController {
         Hotel hotel = (Hotel) session.getAttribute("hotel");
         if (hotel != null) {
             return hotelService.addItem(foodItem, image, hotel, map);
+        } else {
+            map.put("neg", "Invalid Session");
+            return "HotelLogin";
+        }
+    }
+
+    @GetMapping("/hotel/fetch-items")
+    public String fetchItems(HttpSession session, ModelMap map) {
+    Hotel hotel = (Hotel) session.getAttribute("hotel");
+        if (hotel != null) {
+           return hotelService.fetchItems(hotel,session, map);
         } else {
             map.put("neg", "Invalid Session");
             return "HotelLogin";

@@ -66,8 +66,6 @@ public class HotelService {
             map.put("neg", "invalid email");
             return "HotelLogin";
         } else {
-            System.out.println(AES.decrypt(hotel.getPassword(), "123"));
-            System.out.println(helper.getPassword());
             if (AES.decrypt(hotel.getPassword(), "123").equals(helper.getPassword())) {
                 session.setAttribute("hotel", hotel);
                 map.put("pos", "Loggedin successfully");
@@ -93,6 +91,19 @@ public class HotelService {
         hotelDao.save(hotel);
         map.put("pos", "Item added successfully");
         return "HotelHome";
+    }
+
+    public String fetchItems(Hotel hotel, HttpSession session, ModelMap map) {
+        List<FoodItem> items =hotel.getItems();
+        if(items==null || items.isEmpty())
+        {
+            map.put("neg", "no items");
+            return "HotelHome";
+        }
+        else{
+            map.put("items", items);
+            return "HotelItems";
+        }
     }
 
 }
