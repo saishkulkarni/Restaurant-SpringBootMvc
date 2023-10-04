@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,35 +8,65 @@
 <title>Login</title>
 <style>
 body {
-	font-family: Arial, sans-serif;
-	background-color: #f0f0f0;
-	text-align: center;
-	margin: 0;
-	padding: 0;
-	background-image:url("../images/1.jpg");
-	background-size: cover;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
-button {
-	background-color: #007bff;
-	color: #fff;
-	padding: 10px 20px;
-	margin: 10px;
-	border: none;
-	cursor: pointer;
-	font-size: 16px;
-	border-radius: 5px;
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
 }
 
-button:hover {
-	background-color: #0056b3;
+.button-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
 }
+
+.button-container a {
+    text-decoration: none;
+    margin: 10px 0;
+}
+
+.button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+.logo {
+    font-size: 36px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
 </style>
 </head>
 <body>
-
-	<a href="/admin"><button>Admin</button></a>
-	<a href="/hotel"><button>Hotel</button></a>
-	<a href="/customer"><button>Customer</button></a>
+    <div class="container">
+        <div class="logo">My Restaurant</div>
+        <div class="button-container">
+            <a href="/admin" class="button">Admin</a>
+            <a href="/hotel" class="button">Hotel</a>
+            <a href="/customer" class="button">Customer</a>
+        </div>
+    </div>
 </body>
 </html>

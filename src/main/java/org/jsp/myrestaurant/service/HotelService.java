@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.jsp.myrestaurant.dao.FoodItemDao;
 import org.jsp.myrestaurant.dao.HotelDao;
 import org.jsp.myrestaurant.dto.FoodItem;
 import org.jsp.myrestaurant.dto.Hotel;
@@ -25,6 +26,9 @@ public class HotelService {
 
     @Autowired
     SendMailLogic mailLogic;
+
+    @Autowired
+    FoodItemDao foodItemDao;
 
     public String register(Hotel hotel, ModelMap map) {
         Hotel hotel1 = hotelDao.fetchByEmail(hotel.getEmail());
@@ -105,5 +109,11 @@ public class HotelService {
             return "HotelItems";
         }
     }
+
+    public String deleteProduct(int id, Hotel hotel, HttpSession session, ModelMap map) {
+       
+    }
+
+   
 
 }

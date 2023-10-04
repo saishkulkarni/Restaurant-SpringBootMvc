@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,9 +70,10 @@ public class HotelController {
             return "HotelLogin";
         }
     }
-    
+
     @PostMapping("/add-item")
-    public String addItem(FoodItem foodItem,@RequestParam MultipartFile image,HttpSession session, ModelMap map) throws IOException {
+    public String addItem(FoodItem foodItem, @RequestParam MultipartFile image, HttpSession session, ModelMap map)
+            throws IOException {
         Hotel hotel = (Hotel) session.getAttribute("hotel");
         if (hotel != null) {
             return hotelService.addItem(foodItem, image, hotel, map);
@@ -83,12 +85,35 @@ public class HotelController {
 
     @GetMapping("/fetch-items")
     public String fetchItems(HttpSession session, ModelMap map) {
-    Hotel hotel = (Hotel) session.getAttribute("hotel");
+        Hotel hotel = (Hotel) session.getAttribute("hotel");
         if (hotel != null) {
-           return hotelService.fetchItems(hotel,session, map);
+            return hotelService.fetchItems(hotel, session, map);
         } else {
             map.put("neg", "Invalid Session");
             return "HotelLogin";
         }
     }
+
+    @GetMapping("/home")
+    public String home(HttpSession session, ModelMap map) {
+        Hotel hotel = (Hotel) session.getAttribute("hotel");
+        if (hotel != null) {
+            return "HotelHome";
+        } else {
+            map.put("neg", "Invalid Session");
+            return "HotelLogin";
+        }
+    }
+
+    @GetMapping("/delete-product/{id}")
+    public String deleteProduct(@PathVariable int id, HttpSession session, ModelMap map) {
+        Hotel hotel = (Hotel) session.getAttribute("hotel");
+        if (hotel != null) {
+            return hotelService.deleteProduct(id, hotel, session, map);
+        } else {
+            map.put("neg", "Invalid Session");
+            return "HotelLogin";
+        }
+    }
+    
 }
