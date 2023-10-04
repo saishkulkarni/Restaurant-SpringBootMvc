@@ -1,5 +1,7 @@
 package org.jsp.myrestaurant.dao;
 
+import java.util.List;
+
 import org.jsp.myrestaurant.dto.FoodItem;
 import org.jsp.myrestaurant.repository.FoodItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,10 @@ public class FoodItemDao {
 
 	public void save(FoodItem foodItem) {
 		foodItemRepository.save(foodItem);
+	}
+
+	public List<FoodItem> fetchAll() {
+		return foodItemRepository.findAll();
 	}
 
 }

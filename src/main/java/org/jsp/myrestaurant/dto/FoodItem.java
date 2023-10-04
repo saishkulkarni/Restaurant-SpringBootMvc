@@ -24,4 +24,5 @@ public class FoodItem {
     @Column(columnDefinition = "LONGBLOB")
     private byte[] picture;
     private int stock;
+    private boolean status;
 }
