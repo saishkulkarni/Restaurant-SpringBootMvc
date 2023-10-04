@@ -116,4 +116,27 @@ public class HotelController {
         }
     }
     
+    @GetMapping("/edit-product/{id}")
+    public String editProduct(@PathVariable int id, HttpSession session, ModelMap map) {
+        Hotel hotel = (Hotel) session.getAttribute("hotel");
+        if (hotel != null) {
+            return hotelService.editProduct(id, hotel, session, map);
+        } else {
+            map.put("neg", "Invalid Session");
+            return "HotelLogin";
+        }
+    }
+    
+    @PostMapping("/edit-item")
+    public String editItem(FoodItem foodItem, @RequestParam MultipartFile image, HttpSession session, ModelMap map)
+            throws IOException {
+        Hotel hotel = (Hotel) session.getAttribute("hotel");
+        if (hotel != null) {
+            return hotelService.editItem(foodItem,session, image, hotel, map);
+        } else {
+            map.put("neg", "Invalid Session");
+            return "HotelLogin";
+        }
+    }
+    
 }

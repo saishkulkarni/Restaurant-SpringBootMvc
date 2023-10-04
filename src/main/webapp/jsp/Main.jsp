@@ -60,6 +60,7 @@ body {
 </style>
 </head>
 <body>
+<h3>${pos}</h3><h2>${neg}</h2>
     <div class="container">
         <div class="logo">My Restaurant</div>
         <div class="button-container">

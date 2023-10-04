@@ -28,7 +28,7 @@ public class CustomerService {
         if (customer1 == null && customer2 == null) {
             int otp = new Random().nextInt(100000, 999999);
             customer.setOtp(otp);
-            logic.send(customer);
+         //   logic.send(customer);
             customer.setPassword(AES.encrypt(customer.getPassword(), "123"));
             dao.save(customer);
             map.put("id", customer.getId());

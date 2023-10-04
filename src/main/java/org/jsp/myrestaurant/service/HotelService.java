@@ -21,99 +21,133 @@ import jakarta.servlet.http.HttpSession;
 
 @Service
 public class HotelService {
-    @Autowired
-    HotelDao hotelDao;
+	@Autowired
+	HotelDao hotelDao;
 
-    @Autowired
-    SendMailLogic mailLogic;
+	@Autowired
+	SendMailLogic mailLogic;
 
-    @Autowired
-    FoodItemDao foodItemDao;
+	@Autowired
+	FoodItemDao foodItemDao;
 
-    public String register(Hotel hotel, ModelMap map) {
-        Hotel hotel1 = hotelDao.fetchByEmail(hotel.getEmail());
-        Hotel hotel2 = hotelDao.fetchByPhone(hotel.getPhone());
-        if (hotel1 == null && hotel2 == null) {
-            int otp = new Random().nextInt(1000, 9999);
-            hotel.setOtp(otp);
-            // mailLogic.send(hotel);
-            hotel.setPassword(AES.encrypt(hotel.getPassword(), "123"));
-            hotelDao.save(hotel);
-            map.put("id", hotel.getId());
-            return "HotelVerifyOtp";
+	public String register(Hotel hotel, ModelMap map) {
+		Hotel hotel1 = hotelDao.fetchByEmail(hotel.getEmail());
+		Hotel hotel2 = hotelDao.fetchByPhone(hotel.getPhone());
+		if (hotel1 == null && hotel2 == null) {
+			int otp = new Random().nextInt(1000, 9999);
+			hotel.setOtp(otp);
+			// mailLogic.send(hotel);
+			hotel.setPassword(AES.encrypt(hotel.getPassword(), "123"));
+			hotelDao.save(hotel);
+			map.put("id", hotel.getId());
+			return "HotelVerifyOtp";
 
-        } else {
-            map.put("neg", "email and phone should not be repeated");
-            return "HotelRegister";
-        }
+		} else {
+			map.put("neg", "email and phone should not be repeated");
+			return "HotelRegister";
+		}
 
-    }
+	}
 
-    public String verify(int id, int otp, ModelMap map) {
-        Hotel hotel = hotelDao.fetchById(id);
-        if (hotel.getOtp() == otp) {
-            hotel.setStatus(true);
-            hotelDao.save(hotel);
-            map.put("pos", "Otp verified successfully");
-            return "HotelLogin";
-        } else {
-            map.put("neg", "otp mismatch");
-            map.put("id", hotel.getId());
-            return "HotelVerifyOtp";
-        }
+	public String verify(int id, int otp, ModelMap map) {
+		Hotel hotel = hotelDao.fetchById(id);
+		if (hotel.getOtp() == otp) {
+			hotel.setStatus(true);
+			hotelDao.save(hotel);
+			map.put("pos", "Otp verified successfully");
+			return "HotelLogin";
+		} else {
+			map.put("neg", "otp mismatch");
+			map.put("id", hotel.getId());
+			return "HotelVerifyOtp";
+		}
 
-    }
+	}
 
-    public String login(LoginHelper helper, ModelMap map, HttpSession session) {
-        Hotel hotel = hotelDao.fetchByEmail(helper.getEmail());
-        if (hotel == null) {
-            map.put("neg", "invalid email");
-            return "HotelLogin";
-        } else {
-            if (AES.decrypt(hotel.getPassword(), "123").equals(helper.getPassword())) {
-                session.setAttribute("hotel", hotel);
-                map.put("pos", "Loggedin successfully");
-                return "HotelHome";
-            } else {
-                map.put("neg", "wrong password");
-                return "HotelLogin";
-            }
-        }
-    }
+	public String login(LoginHelper helper, ModelMap map, HttpSession session) {
+		Hotel hotel = hotelDao.fetchByEmail(helper.getEmail());
+		if (hotel == null) {
+			map.put("neg", "invalid email");
+			return "HotelLogin";
+		} else {
+			if (AES.decrypt(hotel.getPassword(), "123").equals(helper.getPassword())) {
+				session.setAttribute("hotel", hotel);
+				map.put("pos", "Loggedin successfully");
+				return "HotelHome";
+			} else {
+				map.put("neg", "wrong password");
+				return "HotelLogin";
+			}
+		}
+	}
 
-    public String addItem(FoodItem foodItem, MultipartFile image, Hotel hotel, ModelMap map) throws IOException {
+	public String addItem(FoodItem foodItem, MultipartFile image, Hotel hotel, ModelMap map) throws IOException {
 
-        byte[] picture = new byte[image.getInputStream().available()];
-        image.getInputStream().read(picture);
+		byte[] picture = new byte[image.getInputStream().available()];
+		image.getInputStream().read(picture);
 
-        foodItem.setPicture(picture);
-        List<FoodItem> list = hotel.getItems();
-        if (list == null)
-            list = new ArrayList<FoodItem>();
-        list.add(foodItem);
-        hotel.setItems(list);
-        hotelDao.save(hotel);
-        map.put("pos", "Item added successfully");
-        return "HotelHome";
-    }
+		foodItem.setPicture(picture);
+		List<FoodItem> list = hotel.getItems();
+		if (list == null)
+			list = new ArrayList<FoodItem>();
+		list.add(foodItem);
+		hotel.setItems(list);
+		hotelDao.save(hotel);
+		map.put("pos", "Item added successfully");
+		return "HotelHome";
+	}
 
-    public String fetchItems(Hotel hotel, HttpSession session, ModelMap map) {
-        List<FoodItem> items =hotel.getItems();
-        if(items==null || items.isEmpty())
-        {
-            map.put("neg", "no items");
-            return "HotelHome";
-        }
-        else{
-            map.put("items", items);
-            return "HotelItems";
-        }
-    }
+	public String fetchItems(Hotel hotel, HttpSession session, ModelMap map) {
+		List<FoodItem> items = hotel.getItems();
+		if (items == null || items.isEmpty()) {
+			map.put("neg", "no items");
+			return "HotelHome";
+		} else {
+			map.put("items", items);
+			return "HotelItems";
+		}
+	}
 
-    public String deleteProduct(int id, Hotel hotel, HttpSession session, ModelMap map) {
-       
-    }
+	public String deleteProduct(int id, Hotel hotel, HttpSession session, ModelMap map) {
+		FoodItem foodItem = foodItemDao.fetchById(id);
+		if (foodItem == null) {
+			map.put("neg", "Something went wrong");
+			return "Main";
+		} else {
+			hotel.getItems().remove(foodItem);
+			hotelDao.save(hotel);
+			foodItemDao.delete(foodItem);
+			map.put("pos", "Item Deleted Success");
+			session.setAttribute("hotel", hotelDao.fetchById(hotel.getId()));
+			return fetchItems(hotelDao.fetchById(hotel.getId()), session, map);
+		}
+	}
 
-   
+	public String editProduct(int id, Hotel hotel, HttpSession session, ModelMap map) {
+		FoodItem foodItem = foodItemDao.fetchById(id);
+		if (foodItem == null) {
+			map.put("neg", "Something went wrong");
+			return "Main";
+		} else {
+			map.put("item", foodItem);
+			return "EditItem";
+		}
+	}
+
+	public String editItem(FoodItem foodItem, HttpSession session, MultipartFile image, Hotel hotel, ModelMap map)
+			throws IOException {
+		byte[] picture = new byte[image.getInputStream().available()];
+		image.getInputStream().read(picture);
+
+		if (picture.length == 0) {
+			foodItem.setPicture(foodItemDao.fetchById(foodItem.getId()).getPicture());
+		} else {
+			foodItem.setPicture(picture);
+		}
+		foodItemDao.save(foodItem);
+		map.put("pos", "Item Updated successfully");
+		session.setAttribute("hotel", hotelDao.fetchById(hotel.getId()));
+		return fetchItems(hotelDao.fetchById(hotel.getId()), session, map);
+	}
 
 }

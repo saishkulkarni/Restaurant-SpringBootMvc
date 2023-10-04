@@ -79,6 +79,7 @@
 </head>
 <body>
     <div class="container">
+    <h3>${pos}</h3><h2>${neg}</h2>
         <h1>Login</h1>
         <form action="/hotel/login" method="post">
             <label for="email">Email:</label>
