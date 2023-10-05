@@ -108,4 +108,45 @@ public class HotelService {
 		}
 	}
 
+	public String deleteProduct(int id, Hotel hotel, HttpSession session, ModelMap map) {
+		FoodItem foodItem = foodItemDao.fetchById(id);
+		if (foodItem == null) {
+			map.put("neg", "Something went wrong");
+			return "Main";
+		} else {
+			hotel.getItems().remove(foodItem);
+			hotelDao.save(hotel);
+			foodItemDao.delete(foodItem);
+			map.put("pos", "Item Deleted Success");
+			session.setAttribute("hotel", hotelDao.fetchById(hotel.getId()));
+			return fetchItems(hotelDao.fetchById(hotel.getId()), session, map);
+		}
+	}
+
+	public String editProduct(int id, Hotel hotel, HttpSession session, ModelMap map) {
+		FoodItem foodItem = foodItemDao.fetchById(id);
+		if (foodItem == null) {
+			map.put("neg", "Something went wrong");
+			return "Main";
+		} else {
+			map.put("item", foodItem);
+			return "EditItem";
+		}
+	}
+
+	public String editItem(FoodItem foodItem, HttpSession session, MultipartFile image, Hotel hotel, ModelMap map)
+			throws IOException {
+		byte[] picture = new byte[image.getInputStream().available()];
+		image.getInputStream().read(picture);
+
+		if (picture.length == 0) {
+			foodItem.setPicture(foodItemDao.fetchById(foodItem.getId()).getPicture());
+		} else {
+			foodItem.setPicture(picture);
+		}
+		foodItemDao.save(foodItem);
+		map.put("pos", "Item Updated successfully");
+		session.setAttribute("hotel", hotelDao.fetchById(hotel.getId()));
+		return fetchItems(hotelDao.fetchById(hotel.getId()), session, map);
+	}
 }
