@@ -47,8 +47,7 @@
 
 </head>
 <body>
-<<<<<<< HEAD
-
+<h3>${pos}</h3><h2>${neg}</h2>
 <h1>My Restaurant</h1>
 
 <div class="button-container">
@@ -57,16 +56,5 @@
   <a href="/customer" class="button">Customer</a>
 </div>
 
-=======
-<h3>${pos}</h3><h2>${neg}</h2>
-    <div class="container">
-        <div class="logo">My Restaurant</div>
-        <div class="button-container">
-            <a href="/admin" class="button">Admin</a>
-            <a href="/hotel" class="button">Hotel</a>
-            <a href="/customer" class="button">Customer</a>
-        </div>
-    </div>
->>>>>>> 87882dbc00ed829be32bc6576ce316fafead8cfe
 </body>
 </html>

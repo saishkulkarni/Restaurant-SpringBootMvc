@@ -27,4 +27,8 @@ public class FoodItemDao {
 	public List<FoodItem> fetchAll() {
 		return foodItemRepository.findAll();
 	}
+
+	public List<FoodItem> fetchAllApproved() {
+		return foodItemRepository.findByStatusTrue();
+	}
 }

@@ -78,7 +78,7 @@
 
 <body>
 	<div class="form-container">
-        <form action="">
+        <form action="/admin/login" method="post">
             <h1>Login</h1>
             <label for="email">Email:</label>
             <input type="email" name="email" required/><br><br>
@@ -87,7 +87,7 @@
             <button>Login</button>
         </form>
         <div class="btn-container">
-            <a href=""><button type="reset">Cancel</button></a>
+            <button type="reset">Cancel</button>
         </div>
     </div>
     <a href="/"><button>Back</button></a>

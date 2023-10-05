@@ -74,8 +74,9 @@
     </style>
 </head>
 <body>
+${pos}${neg}
     <div class="form-container">
-        <form action="">
+        <form action="/customer/login" method="post">
             <h1>Login</h1>
             <label for="email">Email:</label>
             <input type="email" name="email" required/><br><br>
@@ -85,7 +86,7 @@
         </form>
         <div class="btn-container">
             <a href=""><button type="reset">Cancel</button></a>
-            <a href=""><button>Register</button></a>
+            <a href="/customer/signup"><button>Register</button></a>
         </div>
     </div>
     <a href="/"><button>Back</button></a>
