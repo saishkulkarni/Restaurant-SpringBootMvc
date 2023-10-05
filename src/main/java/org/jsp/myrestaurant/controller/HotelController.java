@@ -25,95 +25,96 @@ import jakarta.validation.Valid;
 @Controller
 @Component
 public class HotelController {
-    @Autowired
-    Hotel hotel;
+	@Autowired
+	Hotel hotel;
 
-    @Autowired
-    HotelService hotelService;
+	@Autowired
+	HotelService hotelService;
 
-    @GetMapping
-    public String hotelLogin() {
-        return "HotelLogin";
-    }
+	@GetMapping
+	public String hotelLogin() {
+		return "HotelLogin";
+	}
 
-    @GetMapping("/register")
-    public String hotelRegister(ModelMap map) {
-        map.put("hotel", hotel);
-        return "HotelRegister";
-    }
+	@GetMapping("/register")
+	public String hotelRegister(ModelMap map) {
+		map.put("hotel", hotel);
+		return "HotelRegister";
+	}
 
-    @PostMapping("/register")
-    public String register(@Valid Hotel hotel, BindingResult result, ModelMap map) {
-        if (result.hasErrors()) {
-            return "HotelRegister";
-        }
-        return hotelService.register(hotel, map);
-    }
+	@PostMapping("/register")
+	public String register(@Valid Hotel hotel, BindingResult result, ModelMap map) {
+		if (result.hasErrors()) {
+			return "HotelRegister";
+		}
+		return hotelService.register(hotel, map);
+	}
 
-    @PostMapping("/verify-otp")
-    public String verifyOtp(@RequestParam int id, @RequestParam int otp, ModelMap map) {
-        return hotelService.verify(id, otp, map);
-    }
+	@PostMapping("/verify-otp")
+	public String verifyOtp(@RequestParam int id, @RequestParam int otp, ModelMap map) {
+		return hotelService.verify(id, otp, map);
+	}
 
-    @PostMapping("/login")
-    public String login(LoginHelper helper, ModelMap map, HttpSession session) {
-        return hotelService.login(helper, map, session);
-    }
+	@PostMapping("/login")
+	public String login(LoginHelper helper, ModelMap map, HttpSession session) {
+		return hotelService.login(helper, map, session);
+	}
 
-    @GetMapping("/add-item")
-    public String addItem(HttpSession session, ModelMap map) {
-        Hotel hotel = (Hotel) session.getAttribute("hotel");
-        if (hotel != null) {
-            return "AddItem";
-        } else {
-            map.put("neg", "Invalid Session");
-            return "HotelLogin";
-        }
-    }
+	@GetMapping("/add-item")
+	public String addItem(HttpSession session, ModelMap map) {
+		Hotel hotel = (Hotel) session.getAttribute("hotel");
+		if (hotel != null) {
+			return "AddItem";
+		} else {
+			map.put("neg", "Invalid Session");
+			return "HotelLogin";
+		}
+	}
 
-    @PostMapping("/add-item")
-    public String addItem(FoodItem foodItem, @RequestParam MultipartFile image, HttpSession session, ModelMap map)
-            throws IOException {
-        Hotel hotel = (Hotel) session.getAttribute("hotel");
-        if (hotel != null) {
-            return hotelService.addItem(foodItem, image, hotel, map);
-        } else {
-            map.put("neg", "Invalid Session");
-            return "HotelLogin";
-        }
-    }
+	@PostMapping("/add-item")
+	public String addItem(FoodItem foodItem, @RequestParam MultipartFile image, HttpSession session, ModelMap map)
+			throws IOException {
+		Hotel hotel = (Hotel) session.getAttribute("hotel");
+		if (hotel != null) {
+			return hotelService.addItem(foodItem, image, hotel, map);
+		} else {
+			map.put("neg", "Invalid Session");
+			return "HotelLogin";
+		}
+	}
 
-    @GetMapping("/fetch-items")
-    public String fetchItems(HttpSession session, ModelMap map) {
-        Hotel hotel = (Hotel) session.getAttribute("hotel");
-        if (hotel != null) {
-            return hotelService.fetchItems(hotel, session, map);
-        } else {
-            map.put("neg", "Invalid Session");
-            return "HotelLogin";
-        }
-    }
+	@GetMapping("/fetch-items")
+	public String fetchItems(HttpSession session, ModelMap map) {
+		Hotel hotel = (Hotel) session.getAttribute("hotel");
+		if (hotel != null) {
+			return hotelService.fetchItems(hotel, session, map);
+		} else {
+			map.put("neg", "Invalid Session");
+			return "HotelLogin";
+		}
+	}
 
-    @GetMapping("/home")
-    public String home(HttpSession session, ModelMap map) {
-        Hotel hotel = (Hotel) session.getAttribute("hotel");
-        if (hotel != null) {
-            return "HotelHome";
-        } else {
-            map.put("neg", "Invalid Session");
-            return "HotelLogin";
-        }
-    }
+	@GetMapping("/home")
+	public String home(HttpSession session, ModelMap map) {
+		Hotel hotel = (Hotel) session.getAttribute("hotel");
+		if (hotel != null) {
+			return "HotelHome";
+		} else {
+			map.put("neg", "Invalid Session");
+			return "HotelLogin";
+		}
+	}
 
-    @GetMapping("/delete-product/{id}")
-    public String deleteProduct(@PathVariable int id, HttpSession session, ModelMap map) {
-        Hotel hotel = (Hotel) session.getAttribute("hotel");
-        if (hotel != null) {
-            return hotelService.deleteProduct(id, hotel, session, map);
-        } else {
-            map.put("neg", "Invalid Session");
-            return "HotelLogin";
-        }
-    }
-    
+	@GetMapping("/delete-product/{id}")
+	public String deleteProduct(@PathVariable int id, HttpSession session, ModelMap map) {
+		Hotel hotel = (Hotel) session.getAttribute("hotel");
+		if (hotel != null) {
+			// return hotelService.deleteProduct(id, hotel, session, map);
+			return null;
+		} else {
+			map.put("neg", "Invalid Session");
+			return "HotelLogin";
+		}
+	}
+
 }

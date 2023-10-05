@@ -29,7 +29,7 @@
         /* Style form inputs */
         input[type="email"],
         input[type="password"] {
-            width: 100%;
+            width: 90%;
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ccc;
