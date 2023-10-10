@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -17,8 +16,8 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class AdminController {
 
-	@Autowired
-	AdminService adminService;
+    @Autowired
+    AdminService adminService;
 
     @GetMapping
     public String adminLogin() {
@@ -72,7 +71,7 @@ public class AdminController {
     public String changeStatus(@PathVariable int id, ModelMap model, HttpSession session) {
         String admin = (String) session.getAttribute("admin");
         if (admin != null) {
-            return adminService.changeStatus(id,model, session);
+            return adminService.changeStatus(id, model, session);
         } else {
             model.put("neg", "Invalid Session");
             return "AdminLogin";

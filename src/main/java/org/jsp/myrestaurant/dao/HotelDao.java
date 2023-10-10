@@ -2,8 +2,6 @@ package org.jsp.myrestaurant.dao;
 
 import java.util.List;
 
-import java.util.List;
-
 import org.jsp.myrestaurant.dto.Hotel;
 import org.jsp.myrestaurant.repository.HotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
