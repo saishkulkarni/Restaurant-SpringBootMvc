@@ -59,9 +59,9 @@
 <body>
     <div class="button-container">
         <h1>Admin Home</h1>
-        <button>Approve Products</button>
-        <button>View Hotel</button>
-        <button>View Customers</button>
+        <a href="/admin/products"><button>Approve Products</button></a>
+        <a href="/admin/hotels"><button>View Hotel</button></a>
+       <a href="/admin/customers"><button>View Customers</button></a>
         <a href="/logout"><button class="logout-button">Logout</button></a>
     </div>
 </body>

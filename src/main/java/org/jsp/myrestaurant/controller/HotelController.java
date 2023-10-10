@@ -76,7 +76,7 @@ public class HotelController {
             throws IOException {
         Hotel hotel = (Hotel) session.getAttribute("hotel");
         if (hotel != null) {
-            return hotelService.addItem(foodItem, image, hotel, map);
+            return hotelService.addItem(foodItem, image, hotel, map,session);
         } else {
             map.put("neg", "Invalid Session");
             return "HotelLogin";
@@ -110,6 +110,29 @@ public class HotelController {
         Hotel hotel = (Hotel) session.getAttribute("hotel");
         if (hotel != null) {
             return hotelService.deleteProduct(id, hotel, session, map);
+        } else {
+            map.put("neg", "Invalid Session");
+            return "HotelLogin";
+        }
+    }
+
+    @GetMapping("/edit-product/{id}")
+    public String editProduct(@PathVariable int id, HttpSession session, ModelMap map) {
+        Hotel hotel = (Hotel) session.getAttribute("hotel");
+        if (hotel != null) {
+            return hotelService.editProduct(id, hotel, session, map);
+        } else {
+            map.put("neg", "Invalid Session");
+            return "HotelLogin";
+        }
+    }
+
+    @PostMapping("/update-item")
+    public String updateItem(FoodItem foodItem, @RequestParam MultipartFile image, HttpSession session, ModelMap map)
+            throws IOException {
+        Hotel hotel = (Hotel) session.getAttribute("hotel");
+        if (hotel != null) {
+            return hotelService.updateItem(foodItem, image, hotel, map,session);
         } else {
             map.put("neg", "Invalid Session");
             return "HotelLogin";

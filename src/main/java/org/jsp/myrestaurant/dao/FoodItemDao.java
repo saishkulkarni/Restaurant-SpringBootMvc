@@ -1,12 +1,32 @@
 package org.jsp.myrestaurant.dao;
 
+import java.util.List;
+
+import org.jsp.myrestaurant.dto.FoodItem;
+import org.jsp.myrestaurant.repository.FoodItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class FoodItemDao {
-    @Autowired
-    FoodItemDao foodItemDao;
 
-    
+    @Autowired
+    FoodItemRepository foodItemRepository;
+
+    public FoodItem findById(int id) {
+        return foodItemRepository.findById(id).orElse(null);
+    }
+
+    public void delete(FoodItem item) {
+        foodItemRepository.delete(item);
+    }
+
+    public void save(FoodItem foodItem) {
+        foodItemRepository.save(foodItem);
+    }
+
+    public List<FoodItem> findAll() {
+        return foodItemRepository.findAll();
+    }
+
 }

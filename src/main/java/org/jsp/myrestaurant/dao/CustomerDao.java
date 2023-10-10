@@ -1,5 +1,7 @@
 package org.jsp.myrestaurant.dao;
 
+import java.util.List;
+
 import org.jsp.myrestaurant.dto.Customer;
 import org.jsp.myrestaurant.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,10 @@ public class CustomerDao {
 
     public Customer fetchById(int id) {
         return repository.findById(id).orElse(null);
+    }
+
+    public List<Customer> findAll() {
+        return repository.findAll();
     }
 
 }
