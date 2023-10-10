@@ -33,10 +33,13 @@
     </style>
 </head>
 <body>
+${neg}${pos}
     <h1>Welcome to Our Restaurant</h1>
     <div>
-        <button>View Menu</button>
+        <a href="/customer/fetch-items"><button>View Menu</button></a>
+        
         <button>View Orders</button>
+     <a href="/logout"><button>Logout</button></a>
     </div>
 </body>
 </html>

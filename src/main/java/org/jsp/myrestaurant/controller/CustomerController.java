@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -32,7 +33,7 @@ public class CustomerController {
     @GetMapping("/signup")
     public String loadSign(ModelMap map) {
         map.put("customer", customer);
-        return "CustomerSignUp";
+        return "CustomerSignup";
     }
 
     @PostMapping("/signup")
@@ -50,7 +51,30 @@ public class CustomerController {
     }
 
     @PostMapping("login")
-    public String login(LoginHelper helper, ModelMap map) {
-        return customerService.login(helper, map);
+    public String login(LoginHelper helper, ModelMap map,HttpSession httpSession) {
+        return customerService.login(helper, map,httpSession);
+    }
+    
+    @GetMapping("/fetch-items")
+	public String fetchItems(HttpSession session, ModelMap map) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer!= null) {
+			return customerService.fetchItems(session, map);
+		} else {
+			map.put("neg", "Invalid Session");
+			return "CustomerLogin";
+		}
+	}
+    
+    @GetMapping("/home")
+    public String loadHome(HttpSession session, ModelMap map)
+    {
+    	Customer customer = (Customer) session.getAttribute("customer");
+		if (customer!= null) {
+			return "CustomerHome";
+		} else {
+			map.put("neg", "Invalid Session");
+			return "CustomerLogin";
+		}
     }
 }

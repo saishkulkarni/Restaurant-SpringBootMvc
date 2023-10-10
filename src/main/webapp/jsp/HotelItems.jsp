@@ -56,6 +56,8 @@
     </style>
 </head>
 <body>
+<h3>${pos}</h3>
+<h2>${neg}</h2>
     <section class="product-list">
         <table>
             <tr>

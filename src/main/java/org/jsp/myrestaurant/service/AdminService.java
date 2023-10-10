@@ -10,6 +10,7 @@ import org.jsp.myrestaurant.dto.FoodItem;
 import org.jsp.myrestaurant.dto.Hotel;
 import org.jsp.myrestaurant.helper.LoginHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
@@ -27,21 +28,21 @@ public class AdminService {
     @Autowired
     CustomerDao customerDao;
 
-    public String login(LoginHelper helper, ModelMap model, HttpSession session) {
-        if (helper.getEmail().equals("admin@jsp.com")) {
-            if (helper.getPassword().equals("admin")) {
-                session.setAttribute("admin", "admin");
-                model.put("pass", "Login Success");
-                return "AdminHome";
-            } else {
-                model.put("fail", "Incorrect Password");
-                return "AdminLogin";
-            }
-        } else {
-            model.put("fail", "Incorrect Email");
-            return "AdminLogin";
-        }
-    }
+	public String login(LoginHelper helper, ModelMap model, HttpSession session) {
+		if (helper.getEmail().equals("admin@jsp.com")) {
+			if (helper.getPassword().equals("admin")) {
+				session.setAttribute("admin", "admin");
+				model.put("pass", "Login Success");
+				return "AdminHome";
+			} else {
+				model.put("fail", "Incorrect Password");
+				return "AdminLogin";
+			}
+		} else {
+			model.put("fail", "Incorrect Email");
+			return "AdminLogin";
+		}
+	}
 
     public String getItems(ModelMap model, HttpSession session) {
         List<FoodItem> list = foodItemDao.findAll();

@@ -1,12 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+  <style>
         /* Reset some default styles */
         body {
             font-family: Arial, sans-serif;
@@ -14,29 +15,25 @@
             text-align: center;
             margin: 0;
             padding: 0;
-            background-image: url("../images/2.jpg");
-            background-size: cover;
         }
 
-        /* Style the header */
-        h1 {
-            color: green;
-        }
-
-        /* Style the form */
-        form {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        /* Style form container */
+        .form-container {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
         }
 
         /* Style form inputs */
         input[type="email"],
         input[type="password"] {
-            width: 50%;
+            width: 90%;
             padding: 10px;
-            margin: 5px 0;
+            margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
@@ -53,37 +50,46 @@
             border-radius: 5px;
         }
 
-        /* Style reset button */
-        button[type="reset"] {
-            background-color: #dc3545;
-        }
-
         /* Add hover effect for buttons */
         button:hover {
             background-color: #0056b3;
         }
 
-        /* Style back button */
-        a[href="/"] button {
-            background-color: #333;
+        /* Style register and back buttons */
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
         }
 
-        /* Center the text elements */
-        h1, a {
-            margin-top: 20px;
+        /* Center the form within the container */
+        form {
+            text-align: left;
+        }
+
+        /* Add space between links and buttons */
+        a,
+        button {
+            margin-top: 10px;
         }
     </style>
 </head>
 
 <body>
-    <form action="/admin/login" method="post">
-        <h1>Email</h1>
-        <input type="email" name="email" required /><br /><br />
-        <h1>Password</h1>
-        <input type="password" name="password" required /><br /><br />
-        <button type="submit">Login</button>
-        <button type="reset">Cancel</button>
-    </form><br />
+	<div class="form-container">
+        <form action="/admin/login" method="post">
+            <h1>Login</h1>
+            <label for="email">Email:</label>
+            <input type="email" name="email" required/><br><br>
+            <label for="password">Password:</label>
+            <input type="password" name="password" required/><br><br>
+            <button>Login</button>
+        </form>
+        <div class="btn-container">
+            <button type="reset">Cancel</button>
+        </div>
+    </div>
     <a href="/"><button>Back</button></a>
 </body>
 

@@ -51,7 +51,7 @@
 <body>
     <div class="container">
         <h1>Welcome to Your Hotel Dashboard</h1>
-        <p>${pos} ${neg}</p>
+        <h3>${pos}</h3><h2>${neg}</h2>
         <a href="/hotel/add-item"><button>Add Item</button></a>
         <a href="/hotel/fetch-items"><button>Fetch Items</button></a>
         <a href="/logout"><button>Logout</button></a>

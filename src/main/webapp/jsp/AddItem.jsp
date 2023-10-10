@@ -99,10 +99,12 @@
                 <input type="text" id="description" name="description" required>
             </fieldset>
 
-            <input type="submit" value="Submit">
+            <input type="submit" value="Add">
             <input type="reset" value="Cancel">
         </form>
     </div>
+    <br>
+    <a href="/hotel/home"><button>Back</button></a>
 </body>
 
 </html>
