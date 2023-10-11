@@ -84,12 +84,30 @@ button.back-button {
 					<td>${item.getPrice()}</td>
 					<td>${item.getDescription()}</td>
 					<td>${item.getStock()}</td>
-					<td><a href="">-</a></td>
-					<td>0</td>
-					<td><a href="">+</a></td>
+					<td><a href="/customer/cart-remove/${item.getId()}">-</a></td>
+					<td>
+						<c:if test="${cartItems==null}">
+						0
+						</c:if>
+						<c:if test="${cartItems!=null}">
+						<c:set var="flag" value="true"></c:set>
+						<c:forEach var="food" items="${cartItems}">
+						<c:if test="${food.getName().equals(item.getName())}">
+						${food.getQuantity()}
+						<c:set var="flag" value="false"></c:set>
+						</c:if>
+						</c:forEach>
+						<c:if test="${flag==true}">
+						0
+						</c:if>
+						</c:if>
+					</td>
+					<td><a href="/customer/cart-add/${item.getId()}">+</a></td>
 				</tr>
 			</c:forEach>
 		</table>
+		<br>
+		<a href="/customer/viewcart"><button>View Cart</button></a>
 	</section>
 	<a href="/customer/home" class="button">
 		<button class="back-button">Back</button>

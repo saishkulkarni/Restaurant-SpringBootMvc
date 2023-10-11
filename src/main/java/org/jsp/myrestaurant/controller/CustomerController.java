@@ -8,9 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.razorpay.RazorpayException;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -77,4 +80,37 @@ public class CustomerController {
 			return "CustomerLogin";
 		}
     }
+
+    @GetMapping("/cart-add/{id}")
+    public String addToCart(@PathVariable int id,HttpSession session,ModelMap map) {
+          Customer customer = (Customer) session.getAttribute("customer");
+		if (customer!= null) {
+			return customerService.addToCart(id,customer,map,session);
+		} else {
+			map.put("neg", "Invalid Session");
+			return "CustomerLogin";
+		}  
+    }
+
+    @GetMapping("/cart-remove/{id}")
+    public String removeFromCart(@PathVariable int id,HttpSession session,ModelMap map) {
+          Customer customer = (Customer) session.getAttribute("customer");
+		if (customer!= null) {
+			return customerService.removeFromCart(id,customer,map,session);
+		} else {
+			map.put("neg", "Invalid Session");
+			return "CustomerLogin";
+		}  
+    }
+
+    @GetMapping("/viewcart")
+	public String viewCart(HttpSession session, ModelMap modelMap) throws RazorpayException {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer != null) {
+			return customerService.viewCart(session, customer, modelMap);
+		} else {
+			modelMap.put("neg", "Invalid Session");
+			return "Main";
+		}
+	}
 }

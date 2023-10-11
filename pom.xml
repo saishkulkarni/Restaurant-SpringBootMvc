@@ -18,7 +18,11 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
-
+<dependency>
+			<groupId>com.razorpay</groupId>
+			<artifactId>razorpay-java</artifactId>
+			<version>1.4.3</version>
+		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>

@@ -81,7 +81,8 @@ public class HotelService {
 		}
 	}
 
-	public String addItem(FoodItem foodItem, MultipartFile image, Hotel hotel, ModelMap map,HttpSession session) throws IOException {
+	public String addItem(FoodItem foodItem, MultipartFile image, Hotel hotel, ModelMap map, HttpSession session)
+			throws IOException {
 
 		byte[] picture = new byte[image.getInputStream().available()];
 		image.getInputStream().read(picture);
@@ -93,22 +94,12 @@ public class HotelService {
 		list.add(foodItem);
 		hotel.setItems(list);
 		hotelDao.save(hotel);
-        
-        session.setAttribute("hotel", hotelDao.fetchById(hotel.getId()));
+
+		session.setAttribute("hotel", hotelDao.fetchById(hotel.getId()));
 		map.put("pos", "Item added successfully");
 		return "HotelHome";
 	}
 
-    public String fetchItems(Hotel hotel, HttpSession session, ModelMap map) {
-        List<FoodItem> items = hotel.getItems();
-        if (items == null || items.isEmpty()) {
-            map.put("neg", "no items");
-            return "HotelHome";
-        } else {
-            map.put("items", items);
-            return "HotelItems";
-        }
-    }
 	public String fetchItems(Hotel hotel, HttpSession session, ModelMap map) {
 		List<FoodItem> items = hotel.getItems();
 		if (items == null || items.isEmpty()) {
@@ -120,52 +111,53 @@ public class HotelService {
 		}
 	}
 
-    public String deleteProduct(int id, Hotel hotel, HttpSession session, ModelMap map) {
-        FoodItem item = foodItemDao.findById(id);
-        if (item != null) {
-            hotel.getItems().remove(item);
-            hotelDao.save(hotel);
+	public String deleteProduct(int id, Hotel hotel, HttpSession session, ModelMap map) {
+		FoodItem item = foodItemDao.findById(id);
+		if (item != null) {
+			hotel.getItems().remove(item);
+			hotelDao.save(hotel);
 
-            foodItemDao.delete(item);
+			foodItemDao.delete(item);
 
-            map.put("pos", "Data Deleted Successfully");
-            session.setAttribute("hotel", hotelDao.fetchById(hotel.getId()));
-            return fetchItems(hotelDao.fetchById(hotel.getId()), session, map);
+			map.put("pos", "Data Deleted Successfully");
+			session.setAttribute("hotel", hotelDao.fetchById(hotel.getId()));
+			return fetchItems(hotelDao.fetchById(hotel.getId()), session, map);
 
-        } else {
-            map.put("neg", "Something Went Wrong");
-            return "Main";
-        }
-    }
+		} else {
+			map.put("neg", "Something Went Wrong");
+			return "Main";
+		}
+	}
 
-    public String editProduct(int id, Hotel hotel, HttpSession session, ModelMap map) {
-         FoodItem item = foodItemDao.findById(id);
-        if (item != null) {
-            map.put("item", item);
-            return "EditItem";
-        } else {
-            map.put("neg", "Something Went Wrong");
-            return "Main";
-        }
-    }
+	public String editProduct(int id, Hotel hotel, HttpSession session, ModelMap map) {
+		FoodItem item = foodItemDao.findById(id);
+		if (item != null) {
+			map.put("item", item);
+			return "EditItem";
+		} else {
+			map.put("neg", "Something Went Wrong");
+			return "Main";
+		}
+	}
 
-    public String updateItem(FoodItem foodItem, MultipartFile image, Hotel hotel, ModelMap map, HttpSession session) throws IOException {
-        
-        byte[] picture = new byte[image.getInputStream().available()];
-        image.getInputStream().read(picture);
+	public String updateItem(FoodItem foodItem, MultipartFile image, Hotel hotel, ModelMap map, HttpSession session)
+			throws IOException {
 
-        if(picture.length==0)
-            foodItem.setPicture(foodItemDao.findById(foodItem.getId()).getPicture());
-        else
-        foodItem.setPicture(picture);
-        
-        foodItemDao.save(foodItem);
+		byte[] picture = new byte[image.getInputStream().available()];
+		image.getInputStream().read(picture);
 
-        session.setAttribute("hotel", hotelDao.fetchById(hotel.getId()));
-        map.put("pos", "Item Updated successfully");
-        return fetchItems( hotelDao.fetchById(hotel.getId()), session, map);
-        
-    }
+		if (picture.length == 0)
+			foodItem.setPicture(foodItemDao.findById(foodItem.getId()).getPicture());
+		else
+			foodItem.setPicture(picture);
+
+		foodItemDao.save(foodItem);
+
+		session.setAttribute("hotel", hotelDao.fetchById(hotel.getId()));
+		map.put("pos", "Item Updated successfully");
+		return fetchItems(hotelDao.fetchById(hotel.getId()), session, map);
+
+	}
 
 	public String editItem(FoodItem foodItem, HttpSession session, MultipartFile image, Hotel hotel, ModelMap map)
 			throws IOException {
@@ -173,7 +165,7 @@ public class HotelService {
 		image.getInputStream().read(picture);
 
 		if (picture.length == 0) {
-			foodItem.setPicture(foodItemDao.fetchById(foodItem.getId()).getPicture());
+			foodItem.setPicture(foodItemDao.findById(foodItem.getId()).getPicture());
 		} else {
 			foodItem.setPicture(picture);
 		}
