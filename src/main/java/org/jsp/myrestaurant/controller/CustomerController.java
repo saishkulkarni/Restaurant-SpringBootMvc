@@ -113,4 +113,26 @@ public class CustomerController {
 			return "Main";
 		}
 	}
+
+    @PostMapping("/payment/{id}")
+    public String checkPayment(@RequestParam String razorpay_payment_id,@PathVariable int id,ModelMap modelMap,HttpSession session) {
+    Customer customer = (Customer) session.getAttribute("customer");
+		if (customer != null) {
+			return customerService.checkPayment(razorpay_payment_id,session,id, customer, modelMap);
+		} else {
+			modelMap.put("neg", "Invalid Session");
+			return "Main";
+		}
+    }
+
+    @GetMapping("/fetch-orders")
+    public String fetchOrders(HttpSession session, ModelMap modelMap){
+         Customer customer = (Customer) session.getAttribute("customer");
+		if (customer != null) {
+			return customerService.fetchOrders(modelMap,session,customer);
+		} else {
+			modelMap.put("neg", "Invalid Session");
+			return "Main";
+		}
+    }
 }

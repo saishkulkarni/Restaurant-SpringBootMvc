@@ -1,5 +1,6 @@
 package org.jsp.myrestaurant.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -10,6 +11,7 @@ import org.jsp.myrestaurant.dao.FoodItemDao;
 import org.jsp.myrestaurant.dto.Cart;
 import org.jsp.myrestaurant.dto.Customer;
 import org.jsp.myrestaurant.dto.CustomerFood;
+import org.jsp.myrestaurant.dto.CustomerOrder;
 import org.jsp.myrestaurant.dto.FoodItem;
 import org.jsp.myrestaurant.dto.PaymentDetails;
 import org.jsp.myrestaurant.helper.AES;
@@ -201,52 +203,91 @@ public class CustomerService {
 
     public String viewCart(HttpSession session, Customer customer, ModelMap map) throws RazorpayException {
         Cart cart = customer.getCart();
-		if (cart == null) {
-			map.put("neg", "No Items in Cart");
-			return fetchItems(session, map);
-		} else {
-			List<CustomerFood> list = cart.getFoods();
-			if (list == null || list.isEmpty()) {
-				map.put("neg", "No Items in Cart");
-				return fetchItems(session, map);
-			} else {
-				boolean flag = true;
-				for (CustomerFood customerFood : list) {
-					if (customerFood.getQuantity() > 0)
-						flag = false;
-					break;
-				}
-				if (flag) {
-					map.put("neg", "No Items in Cart");
-					return fetchItems(session, map);
-				} else {
-					double amount = 0;
-					for (CustomerFood customerFood : list) {
-						amount = amount + customerFood.getPrice();
-					}
+        if (cart == null) {
+            map.put("neg", "No Items in Cart");
+            return fetchItems(session, map);
+        } else {
+            List<CustomerFood> list = cart.getFoods();
+            if (list == null || list.isEmpty()) {
+                map.put("neg", "No Items in Cart");
+                return fetchItems(session, map);
+            } else {
+                boolean flag = true;
+                for (CustomerFood customerFood : list) {
+                    if (customerFood.getQuantity() > 0)
+                        flag = false;
+                    break;
+                }
+                if (flag) {
+                    map.put("neg", "No Items in Cart");
+                    return fetchItems(session, map);
+                } else {
+                    double amount = 0;
+                    for (CustomerFood customerFood : list) {
+                        amount = amount + customerFood.getPrice();
+                    }
 
-					JSONObject object = new JSONObject();
-					object.put("amount", (int) (amount * 100));
-					object.put("currency", "INR");
+                    JSONObject object = new JSONObject();
+                    object.put("amount", (int) (amount * 100));
+                    object.put("currency", "INR");
 
-					RazorpayClient client = new RazorpayClient("rzp_test_pXzztvFSoP8U0y", "CSRywILSxpj4nnthtfisyY57");
-					Order order = client.orders.create(object);
-					PaymentDetails details=new PaymentDetails();
-					details.setAmount(order.get("amount").toString());
-					details.setCurrency(order.get("currency").toString());
-					details.setPaymentId(null);
-					details.setOrderId(order.get("id").toString());
-					details.setStatus(order.get("status"));
-					details.setKeyDetails("rzp_test_pXzztvFSoP8U0y");
+                    RazorpayClient client = new RazorpayClient("rzp_test_pXzztvFSoP8U0y", "CSRywILSxpj4nnthtfisyY57");
+                    Order order = client.orders.create(object);
+                    PaymentDetails details = new PaymentDetails();
+                    details.setAmount(order.get("amount").toString());
+                    details.setCurrency(order.get("currency").toString());
+                    details.setPaymentId(null);
+                    details.setOrderId(order.get("id").toString());
+                    details.setStatus(order.get("status"));
+                    details.setKeyDetails("rzp_test_pXzztvFSoP8U0y");
 
-					session.setAttribute("customer", dao.fetchById(customer.getId()));
-					map.put("details", foodItemDao.saveDetails(details));
-					map.put("items", list);
-					map.put("customer", dao.fetchById(customer.getId()));
-					return "ViewCart";
-				}
-			}
-		}
+                    session.setAttribute("customer", dao.fetchById(customer.getId()));
+                    map.put("details", foodItemDao.saveDetails(details));
+                    map.put("items", list);
+                    map.put("customer", dao.fetchById(customer.getId()));
+                    return "ViewCart";
+                }
+            }
+        }
+    }
+
+    public String checkPayment(String payment_id, HttpSession session, int id, Customer customer, ModelMap modelMap) {
+        if (payment_id != null) {
+            PaymentDetails details = foodItemDao.fetchDetails(id);
+            details.setPaymentId(payment_id);
+            details.setStatus("Success");
+            foodItemDao.saveDetails(details);
+
+            List<CustomerOrder> orders = customer.getOrders();
+            if (orders == null)
+                orders = new ArrayList<CustomerOrder>();
+            CustomerOrder customerOrder = new CustomerOrder();
+            customerOrder.setDateTime(LocalDateTime.now());
+            customerOrder.setPrice(Double.parseDouble(details.getAmount()) / 100);
+            customerOrder.setList(customer.getCart().getFoods());
+
+            orders.add(customerOrder);
+            customer.setOrders(orders);
+            customer.setCart(null);
+            dao.save(customer);
+            session.setAttribute("customer", dao.fetchById(customer.getId()));
+            modelMap.put("pos", "Order Placed Success");
+            return "CustomerHome";
+        } else {
+            modelMap.put("neg", "Payment Not Done");
+            return "CustomerHome";
+        }
+    }
+
+    public String fetchOrders(ModelMap modelMap, HttpSession session, Customer customer) {
+        List<CustomerOrder> orders = customer.getOrders();
+        if (orders == null || orders.isEmpty()) {
+            modelMap.put("neg", "No Orders Found");
+            return "CustomerHome";
+        } else {
+            modelMap.put("orders", orders);
+            return "CustomerOrders";
+        }
     }
 
 }

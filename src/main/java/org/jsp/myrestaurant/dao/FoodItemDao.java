@@ -64,4 +64,8 @@ public class FoodItemDao {
         return detailsRepository.save(details);
     }
 
+     public PaymentDetails fetchDetails(int id) {
+        return detailsRepository.findById(id).orElse(null);
+    }
+
 }

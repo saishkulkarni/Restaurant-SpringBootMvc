@@ -38,7 +38,7 @@ ${neg}${pos}
     <div>
         <a href="/customer/fetch-items"><button>View Menu</button></a>
         
-        <button>View Orders</button>
+        <a href="/customer/fetch-orders"><button>View Orders</button></a>
      <a href="/logout"><button>Logout</button></a>
     </div>
 </body>
